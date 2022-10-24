@@ -1,120 +1,177 @@
-package ui; 
-
+package ui;
+import model.*;
 import java.util.Scanner;
-
-import model.GroundStation;
 
 public class Main{
 
-    private Scanner reader;
-    private GroundStation groundStation;
-	public static final int SIZE_TOTAL_SATELLITES = 5;
-	
+	public static Scanner reader;
+    private RealStateController controller;
 
-	public Main(){
-		reader = new Scanner(System.in); 
+    public Main(){
+        reader = new Scanner(System.in);
+        controller = new RealStateController();
+    }
 
-	}
+	public static void main(String[] args){ //Start of main method.
+        Main main = new Main (); 
 
-    public Scanner getReader(){
-		return reader;
-	}
+        int option = -1; 
+        do{ //Start of the cycle
+            option = main.getOptionShowMenu(); 
+            main.executeOption(option);
 
-    public GroundStation calculatePIRE(){
-		return groundStation; 
-	}
+        }while(option != 0); //End of the cycle.
 
-    public static void main(String[] args){ // Start of main method.
+    } //End of main method.
 
-		// Initialization of variables.
-        Main main = new Main();
-		int option = 0; 
-
-				do{ // Start of cycle.
-
-					option = main.getOptionShowMenu(); 
-					main.executeOption(option);
-
-				}while(option != 0); // End of the cycle.
-
-				main.getReader().close();
-		
-	} // End of main method.
-
-
-	/** getOptionShowMenu: It is responsible for displaying the menu indefinitely so that the user can interact with the options.
+	/** getOptionShowMenu: It is responsible for obtaining the menu of options for interaction with the user.
     * @return Option: int => This is the option with which you interact with the program.
     */
     public int getOptionShowMenu(){
-		int option = 0; 
-		System.out.println("\n<<<<< Bienvenido al programa de comunicaciones por satelite >>>>>");
-        System.out.println("Por favor selecciona una opcion:\n ");
-		System.out.println(
-				"1. Crear estacion terrestre.\n" +
-                "2. Inicializar satelites artificiales.\n" +
-				"0. Salir del programa.\n");
-        System.out.print("Opcion: ");        
-		option = reader.nextInt(); 
+        int option = 0; 
+        printMenu();
 
-		return option; 
-	}
+        option = validateReader(); 
 
+        return option; 
+    }
 
-	/** executeOption: It is responsible for executing each of the program's options and starts them.
-	* @param option: int => Returns the option so that the user can continue to interact indefinitely.
+	/** printMenu: It is in charge of showing the user the game options ribbon.
+     */ 
+    public void printMenu(){
+        System.out.print(
+            "\nBienvenido, administrador de la inmobiliaria, que desea hacer hoy: \n"+	
+            "1. Registrar edificios.\n"+
+            "2. Registrar apartamentos a un edificio.\n"+
+            "3. Registrar a un propietario con su apartamento.\n"+
+            "4. Registrar a un arrendatario y asignar su apartamento.\n"+
+            "5. Consultar cuantos apartamentos disponibles hay en un edificio.\n"+
+            "6. Consultar el valor mensual total a recibir por edificio.\n"+
+            "7. Consultar si un apartamento en especifico esta disponible.\n"+
+            "8. Consultar cuantos apartamentos tiene arrendados una persona.\n"+ 
+            "9. Consultar el valor total por arrendamiento que recibira el propietario.\n"+
+            "0. Salir del programa. \n"+
+            "Opcion: ");  
+    }
+
+	/** validateReader: It is responsible for validating that the user has entered a numerical entry in the options.
+    * @return option: int => The option selected by the user.
     */
-    public void executeOption(int option){
-		String nString = ""; 
-		double nominalPower = 0.0; 
-		double maximumGain = 0.0; 
-		double orbit = 0.0;
-		String msgConfirmation = "";
-		String msgCalcAttenuation = "";
+    public int validateReader(){
+        int option = 0; 
 
-		switch(option){
-			case 1: 
-				
-                System.out.print("\nIngresa el nombre de la estacion: "); 
-                nString = reader.next(); 
+        if(reader.hasNextInt()){
+            option = reader.nextInt(); 
+        }
+        else{
+            reader.nextLine(); 
+            option = -1; 
+        }
 
-                System.out.print("\nIngresa la potencia nominal: "); 
-                nominalPower = reader.nextDouble();
+        return option; 
+    }
 
-                System.out.print("\nIngresa la ganancia maxima: "); 
-                maximumGain = reader.nextDouble(); 
+	public void executeOption(int option){
 
-                groundStation = new GroundStation(nString, nominalPower, maximumGain);
+        switch(option){
+            case 1:
 
-				System.out.println("\nLa estacion terrestre " + groundStation.getGroundStationName() + " ha sido creada su PIRE es de: " + groundStation.calculatePIRE());
+                if(controller.isFoundBuilding()){
 
-				break; 
+                    System.out.println("\nHa iniciado, registrar un edificio.");
 
-			case 2: 
+                    System.out.print("\nIngresa un id para el nuevo edificio: ");
+                    String buildingId = reader.next();
 
-				for (int i = 0; i < SIZE_TOTAL_SATELLITES; i++){
+                    if(controller.searchBuilding(buildingId)==null){
 
-					System.out.print("\nIngrese la distancia de la orbita para el satelite " + (i+1) + ": ");
+                    System.out.print("\nIngresa el numero de apartamentos que tendra este edificio: ");
+                    int numApartments = reader.nextInt();
 
-					orbit = reader.nextDouble();
+                    System.out.print("\nIngresa la direccion donde estara este nuevo edificio: ");
+                    String address = reader.next();
 
-					msgConfirmation = groundStation.addSatellite(orbit);
+                    System.out.println(controller.addBuilding(buildingId, numApartments, address)); 
 
-					System.out.println(msgConfirmation);
+                    }else{
+                        System.out.println("\nLo sentimos, ya hay un edificio con ese ID.");
+                    }
 
-					msgCalcAttenuation = groundStation.getSatellites()[i].calculateAttenuation();
+                }else{
+                    System.out.println("\nLo sentimos, no hay espacio para mas edificios.");
+                }
 
-					System.out.println(msgCalcAttenuation);
-				}
-				
-				break; 
+                break;
 
-			case 0: 
-				System.out.println("\nHasta luego.");
-				break; 
+            case 2:
 
-			default: 
-				System.out.println("\nOpcion invalida, intente nuevamente.");
-				break; 
-		}
-	}
+                
+                break;
+
+            case 3: 
+
+    
+
+                break;
+
+            case 4:
+
+    
+                break;
+
+            case 5:
+               
+
+                break;
+
+            case 6:
+                
+
+                break;
+
+            case 7: 
+
+
+                break;
+
+            case 8: 
+        
+                break;
+
+            case 9: 
+
+                
+
+                break;
+
+            case 10:    
+
+                
+
+                break;
+
+            case 11: 
+
+                
+
+                break;
+
+            case 12:
+
+                
+
+                break;
+
+            case 0: 
+                System.out.println("\nHasta luego administrador.\n");    
+                break;
+
+            default:
+                System.out.println("\nOpcion no valida, intenta nuevamente."); 
+                break;   
+        }
+    }
+
 }
+
+
