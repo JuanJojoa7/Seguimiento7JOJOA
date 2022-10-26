@@ -105,23 +105,177 @@ public class Main{
 
             case 2:
 
+                if(controller.isAvailableBuilding().equals("\nLo sentimos, no hay edificios registrados.")){
+
+                }else{
+                    System.out.println("\nHa iniciado, registrar apartamento.");
+                    System.out.print("\nIngresa el ID del edificio donde estara el apartamento: ");
+                    String buildingId = reader.next();
+
+                    if(controller.searchBuilding(buildingId)==null){
+                        System.out.println("\nLo sentimos, ese edificio no se encuentra registrado.");
+                    }else{
+                        System.out.print("\nIngresa el ID para el registro del apartamento: ");
+                        String aptIdentifier = reader.next();
+
+                        if(controller.searchApartment(buildingId, aptIdentifier)!=null){
+                            System.out.println("\nLo sentimos, ya existe un apartamento con ese ID.");
+                        }else{
+                            System.out.print("\nIngresa cuantos cuartos tendra este apartamento: ");
+                            int numRooms = reader.nextInt();
+
+                            System.out.print("\nIngresa cuantos baños tendra el apartamento: ");
+                            int numBathrooms = reader.nextInt();
+
+                            System.out.print("\nEl apartamento tendra balcon? (S/N): ");
+                            String hasBalcony = reader.next();
+
+                            boolean balcony = true;
+                            while(!hasBalcony.equalsIgnoreCase("S")&& !hasBalcony.equalsIgnoreCase("N")){
+                                if(hasBalcony.equalsIgnoreCase("S")){
+                                    balcony = true;
+                                }else if(hasBalcony.equalsIgnoreCase("N")){
+                                    balcony = false;
+                                }else{
+                                    System.out.print("\nLo sentimos, esta opcion para balcon no es valida intenta nuevamente.");
+                                    hasBalcony = reader.next();
+                                }
+                            }
+                            
+                            System.out.print("\nIngresa el valor del arrendamiento para el apartamento a registrar: ");
+                            double rentalValue = reader.nextDouble();
+
+                            System.out.println(controller.AddApartment(buildingId, aptIdentifier, numRooms, numBathrooms, balcony, rentalValue));
+                        }
+                    }
+
+                }
                 
                 break;
 
             case 3: 
 
+                System.out.println("\nHa iniciado, registrar propietario.");
+
+                System.out.print("\nIngresa el edificio donde esta el apartamento del que eres propietario: ");
+                String buildingId = reader.next();
+
+                if(controller.searchBuilding(buildingId)==null){
+                    System.out.println("\nLo sentimos, ese edificio no se encuentra registrado.");
+                }else{
+
+                    System.out.print("\nIngresa el apartamento del que eres propietario: ");
+                    String aptIdentifier = reader.next();
+
+                    if(controller.searchApartment(buildingId, aptIdentifier)==null){
+                        System.out.println("\nLo sentimos, este apartamento no existe en el edificio.");
+                    }else{
+
+                        System.out.print("\nIngresa que tipo de documento tienes?: ");
+                        String id = reader.next();
+
+                        System.out.print("\nIngresa tu numero de documento: ");
+                        String numId = reader.next();
+
+                        if(controller.searchPerson(numId)!=null){
+                            System.out.println("\nLo sentimos, ya hay una persona con ese numero de documento registrado.");
+                        }else{
+                            System.out.print("\nIngresa tu nombre completo: ");
+                            String name = reader.next();
     
+                            System.out.print("\nIngresa tu numero de contacto: ");
+                            String phoneNumber = reader.next();
+
+                            System.out.print(
+                                "\nIngresa solo una opcion, que tipo de telefono es?: \n"+	
+                                "1. Telefono de Casa.\n"+
+                                "2. Telefono de Oficina.\n"+
+                                "3. Telefono Movil.\n"+
+                                "4. Telefono Familiar.\n"+
+                                "5. Otro tipo.\n"+
+                                "Opcion: ");  
+                                int typePhone = reader.nextInt();
+    
+                            System.out.print("\nCual es el numero de tu cuenta bancaria: "); 
+                            String account = reader.next();
+
+                            System.out.print("\nIngresa el banco asignado a la cuenta bancaria: ");
+                            String bank = reader.next();
+
+                            System.out.println(controller.addPerson(buildingId, aptIdentifier, id, numId, name, phoneNumber, typePhone, account, bank));
+        
+                        }
+
+                    }
+    
+                }
 
                 break;
 
             case 4:
+            
+                System.out.println("\nHa iniciado, registrar arrendatario.");
 
+                System.out.print("\nIngresa el edificio donde esta el apartamento que vas a arrendar: ");
+                buildingId = reader.next();
+
+                if(controller.searchBuilding(buildingId)==null){
+                    System.out.println("\nLo sentimos, ese edificio no se encuentra registrado.");
+                }else{
+
+                System.out.print("\nIngresa el apartamento que vas a arrendar: ");
+                String aptIdentifier = reader.next();
+
+                if(controller.searchApartment(buildingId, aptIdentifier)==null){
+                    System.out.println("\nLo sentimos, este apartamento no existe en el edificio.");
+                }else{
+
+                    System.out.print("\nIngresa que tipo de documento tienes?: ");
+                    String id = reader.next();
+
+                    System.out.print("\nIngresa tu numero de documento: ");
+                    String numId = reader.next();
+
+                    if(controller.searchPerson(numId)!=null){
+                        System.out.println("\nLo sentimos, ya hay una persona con ese numero de documento registrado.");
+                    }else{
+                        System.out.print("\nIngresa tu nombre completo: ");
+                        String name = reader.next();
+
+                        System.out.print("\nIngresa tu numero de contacto: ");
+                        String phoneNumber = reader.next();
+
+                        System.out.print(
+                            "\nIngresa solo una opcion, que tipo de telefono es?: \n"+	
+                            "1. Telefono de Casa.\n"+
+                            "2. Telefono de Oficina.\n"+
+                            "3. Telefono Movil.\n"+
+                            "4. Telefono Familiar.\n"+
+                            "5. Otro tipo.\n"+
+                            "Opcion: ");  
+                            int typePhone = reader.nextInt();
+
+                        System.out.println(controller.addPerson(buildingId, aptIdentifier, id, numId, name, phoneNumber, typePhone));
     
+                    }
+
+                }
+
+            }
+
                 break;
 
             case 5:
-               
 
+                if(controller.isAvailableBuilding().equals("\nLo sentimos, no hay edificios registrados.")){
+                    System.out.println(controller.isAvailableBuilding());
+                }else{
+                    System.out.print("\nIngresa el ID del edificio que deseas consultar: ");
+                    buildingId = reader.next();
+
+                    System.out.println(controller.listApartments(buildingId));
+                }
+               
                 break;
 
             case 6:
@@ -131,6 +285,12 @@ public class Main{
 
             case 7: 
 
+                if(controller.isAvailableBuilding().equals("\nLo sentimos, no hay edificios registrados.")){
+                    System.out.println(controller.isAvailableBuilding());
+                }else{
+
+                }
+
 
                 break;
 
@@ -139,24 +299,6 @@ public class Main{
                 break;
 
             case 9: 
-
-                
-
-                break;
-
-            case 10:    
-
-                
-
-                break;
-
-            case 11: 
-
-                
-
-                break;
-
-            case 12:
 
                 
 

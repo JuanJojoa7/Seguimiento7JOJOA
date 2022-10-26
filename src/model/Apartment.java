@@ -2,13 +2,15 @@ package model;
 
 public class Apartment{
 
-    private int aptIdentifier;
+    private String aptIdentifier;
     private int numRooms;
     private int numBathrooms;
     private boolean hasBalcony;
     private double rentalValue;
+    private AptOwner aptOwner;
+    private AptRenter aptRenter;
 
-    public Apartment(int aptIdentifier, int numRooms, int numBathrooms, boolean hasBalcony, double rentalValue){
+    public Apartment(String aptIdentifier, int numRooms, int numBathrooms, boolean hasBalcony, double rentalValue){
         this.aptIdentifier = aptIdentifier;
         this.numRooms = numRooms;
         this.numBathrooms = numBathrooms;
@@ -16,7 +18,7 @@ public class Apartment{
         this.rentalValue = rentalValue;
     }
 
-    public int getAptIdentifier(){
+    public String getAptIdentifier(){
         return aptIdentifier;
     }
 
@@ -34,6 +36,18 @@ public class Apartment{
 
     public double getRentalValue(){
         return rentalValue;
+    }
+
+    public AptRenter getRenter(){
+        return aptRenter;
+    }
+
+    public void setAptOwner(AptOwner person){
+        this.aptOwner = person;
+    }
+
+    public void setAptRenter(AptRenter person){
+        this.aptRenter = person;
     }
     
 }
