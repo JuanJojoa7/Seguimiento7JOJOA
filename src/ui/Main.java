@@ -48,8 +48,6 @@ public class Main{
             "5. Consultar cuantos apartamentos disponibles hay en un edificio.\n"+
             "6. Consultar el valor mensual total a recibir por edificio.\n"+
             "7. Consultar si un apartamento en especifico esta disponible.\n"+
-            "8. Consultar cuantos apartamentos tiene arrendados una persona.\n"+ 
-            "9. Consultar el valor total por arrendamiento que recibira el propietario.\n"+
             "0. Salir del programa. \n"+
             "Opcion: ");  
     }
@@ -71,6 +69,11 @@ public class Main{
         return option; 
     }
 
+    /** calculateNaturalLogarithm: It is in charge of calculating the remaining operations of the natural logarithm using the calculatePotentiation method.
+    * @param valueX: double => This is the value entered by the user to calculate the natural logarithm.
+    * @param limitInf: int => It is the limit constant for the natural logarithm in order to make more accurate calculations.
+    * @return finalResultlog: double => It is the result of performing the natural logarithm which is displayed to the user.
+    */
 	public void executeOption(int option){
 
         switch(option){
@@ -279,7 +282,16 @@ public class Main{
                 break;
 
             case 6:
-                
+
+                if(controller.isAvailableBuilding().equals("\nLo sentimos, no hay edificios registrados.")){
+                    System.out.println(controller.isAvailableBuilding());
+                }else{
+                    System.out.print("\nIngresa el ID del edificio que deseas consultar: ");
+                    buildingId = reader.next();
+
+                    System.out.println(controller.calculateRentalValue(buildingId));
+
+                }
 
                 break;
 
@@ -288,19 +300,14 @@ public class Main{
                 if(controller.isAvailableBuilding().equals("\nLo sentimos, no hay edificios registrados.")){
                     System.out.println(controller.isAvailableBuilding());
                 }else{
+                    System.out.print("\nIngresa el ID del edificio que deseas consultar: ");
+                    buildingId = reader.next();
 
+                    System.out.print("\nIngresa el ID del apartamento deseas consultar: ");
+                    String aptIdentifier = reader.next();
+
+                    System.out.println(controller.searchSpecificApartment(buildingId, aptIdentifier));
                 }
-
-
-                break;
-
-            case 8: 
-        
-                break;
-
-            case 9: 
-
-                
 
                 break;
 
